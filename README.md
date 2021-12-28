@@ -48,20 +48,20 @@ public class IndexServiceImpl implements IndexService{
             .set(Data::getName,newName)
             .set(Data::getUpdateAt,new Date())
             .eq(Data::getId,id)
-            .affectResult(indexDao);
+            .update(indexDao::update);
     }
     public boolean delete(Long id){
-        Delete delete = Delete
+        return 1 == Delete
                 .createDelete(Data.class)
-                .eqIndex(Data::getId,id);
-        return 1 == indexDao.delete(delete);
+                .eqIndex(Data::getId,id)
+                .delete(indexDao::delete);
     }
     public List<Data> query(Date st,Date et){
         return Query
             .createQuery(Data.class)
             .ge(Data::getCreateAt,st)
             .le(Data::getCreateAt,et)
-            .findList(indexDao);
+            .findList(indexDao::findList);
     }
     
     @AutoRowMapper(true)
